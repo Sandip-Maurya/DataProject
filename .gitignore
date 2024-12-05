@@ -3,3 +3,5 @@ input
 input/SSS_users.csv
 input/qandi_cred.json
 dataEnv
+input/SSS_users.csv
+config/config.py
