@@ -1,1 +1,40 @@
-Engagement data updated for 04-Dec-24 on google sheet at H1:H121.
+Engagement data updated for 04-Dec-24 on google sheet at I1:I121.
+Engagement data updated for 05-Dec-24 on google sheet at J1:J121.
+Engagement data updated for 06-Dec-24 on google sheet at K1:K121.
+                         _id      Subject  Proficiency
+0   6617b778054b2b0dfe406337  Mathematics     0.381871
+1   660552909f41bf0ca723d944  Mathematics     8.960114
+2   65f322aeb3175c78f3b50a3f  Mathematics     8.310086
+3   65fa8a38b3175c78f3b5618a  Mathematics    15.386226
+4   660552919f41bf0ca723d94e  Mathematics     9.416088
+5   65fa8a39b3175c78f3b56198  Mathematics    23.463574
+6   6602975f9f41bf0ca723bb26  Mathematics    13.611387
+7   661525ad9f41bf0ca72490ec  Mathematics    23.816106
+8   660552909f41bf0ca723d949  Mathematics    25.496981
+9   660e90ad9f41bf0ca7244339  Mathematics    26.710050
+10  6602bdf69f41bf0ca723bb3b  Mathematics    18.237752
+11  661525ac9f41bf0ca72490e2  Mathematics    15.104292
+12  660538979f41bf0ca723d936  Mathematics    23.865222
+13  66275f5e054b2b0dfe411e8a  Mathematics    21.462948
+14  660298e19f41bf0ca723bb31  Mathematics    23.041896
+15  65fa8a39b3175c78f3b5619d  Mathematics    16.053232
+16  6603f0049f41bf0ca723ca20  Mathematics    37.474300
+17  6641f88707b8130127cb6c9e  Mathematics    12.315382
+18  660bee8e9f41bf0ca7242478  Mathematics    12.684085
+19  660e90ab9f41bf0ca7244330  Mathematics    15.933989
+20  660bee8f9f41bf0ca724247d  Mathematics    21.866066
+21  661525ad9f41bf0ca72490e7  Mathematics    15.030394
+22  665d5ff6c8c9683d0a7e8d63  Mathematics     8.065855
+23  66276160054b2b0dfe411e9b  Mathematics    15.195985
+24  65f59062b3175c78f3b5275e  Mathematics    13.341342
+25  6613e10d9f41bf0ca724815d  Mathematics    16.657456
+26  65fa8a37b3175c78f3b5617f  Mathematics    15.068709
+27  660bee8e9f41bf0ca724246f  Mathematics    11.123109
+28  66275f5e054b2b0dfe411e8f  Mathematics    12.702789
+29  6617b778054b2b0dfe406337      Physics     1.831870
+Engagement data updated for 08-Dec-24 on google sheet at P1:P121.
+   Mathematics    Physics  Chemistry                 studentId
+0     0.381871   1.831870   3.357656  6617b778054b2b0dfe406337
+1     8.960114  13.206732   9.007098  660552909f41bf0ca723d944
+2     8.310086  11.691646   8.306078  65f322aeb3175c78f3b50a3f
+3    15.386226  13.740171  15.959371  65fa8a38b3175c78f3b5618a

@@ -4,16 +4,10 @@ import pandas as pd
 from config.config import SUBJECT_MAP, JEE_SUBJECT_IDS, NEET_OP_IDS
 
 def load_student_details(csv_file_path):
-    """
-    Loads student details from a CSV file.
-
-    :param csv_file_path: Path to the CSV file
-    :return: Pandas DataFrame with student details
-    """
     df = pd.read_csv(csv_file_path)
     return df
 
-def process_exam_data(df_students, df_exam, exam_type='jee'):
+def process_eng_data(df_students, df_exam, exam_type='jee'):
     """
     Processes exam data and aggregates time spent by students per subject.
 
@@ -35,15 +29,15 @@ def process_exam_data(df_students, df_exam, exam_type='jee'):
     ])
     op_idx = 0
 
-    exam_ids = df_students[df_students['examName'].str.contains(exam_type.upper())]['_id'].astype(str).tolist()
+    exam_ids = df_students[df_students['examName'].str.contains(exam_type.upper())]['studentId'].astype(str).tolist()
 
     for s_id in exam_ids:
-        student = df_students[df_students['_id'].astype(str) == s_id].iloc[0]
+        student = df_students[df_students['studentId'].astype(str) == s_id].iloc[0]
         firstName = student['firstName']
         lastName = student['lastName']
         studentClassName = student['studentClassName']
         examName = student['examName']
-        studentId = student['_id']
+        studentId = student['studentId']
 
         for subjectId in subject_ids:
             df_exam_temp = df_exam[
@@ -62,4 +56,8 @@ def process_exam_data(df_students, df_exam, exam_type='jee'):
             ]
             op_idx += 1
 
+    return df_output
+
+def process_prof_data(df_exam, exam_type='jee'):
+    df_output = pd.melt(df_exam, id_vars=['studentId'], var_name='Subject', value_name='Proficiency')
     return df_output
