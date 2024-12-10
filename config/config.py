@@ -23,6 +23,7 @@ utc_today = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, micro
 last_day = utc_today - timedelta(days=1)
 START_DATE = last_day
 END_DATE = utc_today
+TOTAL_SECONDS_IN_MINUTES = 60
 
 # Subject Mapping
 SUBJECT_MAP = {

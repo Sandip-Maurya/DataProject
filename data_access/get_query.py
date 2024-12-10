@@ -2,7 +2,8 @@ from config.config import (
     SSS_CSV_PATH,
     INSTITUTE_ID, 
     START_DATE, 
-    END_DATE
+    END_DATE,
+    TOTAL_SECONDS_IN_MINUTES
 )
 import pandas as pd
 
@@ -28,7 +29,7 @@ def get_eng_query():
                 'studentId': 1,
                 'subjectId': 1,
                 'engagement': {
-                    '$divide': ['$totalTimeTaken', 3600]
+                    '$divide': ['$totalTimeTaken', TOTAL_SECONDS_IN_MINUTES]
                 }
             }
         }

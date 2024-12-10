@@ -1,68 +1,71 @@
-# main.py
+# Import all modules and scripts
 
-from data_access.database import DatabaseClient
-from processing.process_data import load_student_details, process_eng_data, process_prof_data
-from config.config import CSV_FILE_PATH, GOOGLE_CRED_PATH, SHEET_NAME, ENGAGEMENT_TAB_NAME
+from data_access.get_data import (
+    get_jee_eng_data,
+    get_neet_eng_data,
+    get_jee_prof_data,
+    get_neet_prof_data
+)
+from processing.process_data import (
+    process_jee_eng_df,
+    process_neet_eng_df,
+    process_jee_prof_df,
+    process_neet_prof_df
+)
+from config.config import (
+    OUTPUT_FORMAT_PATH,
+    SHEET_NAME,
+    ENGAGEMENT_TAB_NAME,
+    PROFICIENCY_TAB_NAME
+)
+from output.update_data import (
+    update_eng_data,
+    update_prof_data
+)
 from config.gs_auth import get_gs_obj
-from output.update_data import update_eng_data
-import pandas as pd
+import pandas as pd 
+print('Imports done')
 
-def main():
-    # Initialize Database Client
-    db_client = DatabaseClient()
-
-    # Load Student Details
-    df_students = load_student_details(CSV_FILE_PATH)
-
-    # Fetch and Process JEE Engagement Data
-    jee_eng_data = db_client.get_eng_data(db_type='jee')
-    if not jee_eng_data:
-        print('No JEE Engagement Data Available')
-        return
-    jee_eng_df = pd.DataFrame(jee_eng_data)
-    # jee_eng_df['studentId'] = jee_eng_df['studentId'].astype(str)
-    jee_eng_output = process_eng_data(df_students, jee_eng_df, exam_type='jee')
-
-    # Fetch and Process NEET Engagement Data
-    neet_eng_data = db_client.get_eng_data(db_type='neet')
-    if not neet_eng_data:
-        print('No NEET Engagement Data Available')
-        return
-    neet_eng_df = pd.DataFrame(neet_eng_data)
-    neet_eng_df['studentId'] = neet_eng_df['studentId'].astype(str)
-    # Replace botany and zoology subject IDs with biology id (5)
-    neet_eng_df['subjectId'] = neet_eng_df['subjectId'].replace({"4": "5", "146": "5"})
-    neet_eng_output = process_eng_data(df_students, neet_eng_df, exam_type='neet')
-
-    # Combine JEE and NEET Engagement Data
-    df_output = pd.concat([jee_eng_output, neet_eng_output], ignore_index=True)
-    df_output['stud_subj_id'] = df_output['Student ID'] + df_output['Subject']
-    df_output.set_index('stud_subj_id', inplace=True)
-    # Update the Engagement Data to Google Sheet
-    gs_obj = get_gs_obj(GOOGLE_CRED_PATH, SHEET_NAME)   # Authenticate Google Sheet
-    update_eng_data(df_output, gs_obj, pd, ENGAGEMENT_TAB_NAME) # Update Engagement Data in Google Sheet
+# Load output format csv as pandas dataframe
+output_df = pd.read_csv(OUTPUT_FORMAT_PATH)
 
 
-    # Fetch JEE Proficiency Data
-    jee_prof_data = db_client.get_prof_data(db_type='jee')
-    if not jee_prof_data:
-        print('No JEE Proficiency Data Available')
-        return
-    jee_prof_df = pd.DataFrame(jee_prof_data)
-    print(jee_prof_df[:4])
-    # jee_prof_df['_id'] = jee_prof_df['_id'].astype(str)
-    jee_prof_output = process_prof_data(jee_prof_df, exam_type='jee')
-    # print(jee_prof_output[:30])
+# Get JEE Eng Data and Process it
+jee_eng_data = get_jee_eng_data()
+jee_eng_df = pd.DataFrame(jee_eng_data)
+jee_eng_dict = process_jee_eng_df(jee_eng_df)
 
-   # Fetch NEET Proficiency Data
-    neet_prof_data = db_client.get_prof_data(db_type='neet')
-    if not neet_prof_data:
-        print('No NEET Proficiency Data Available')
-        return
-    neet_prof_df = pd.DataFrame(neet_prof_data)
-    neet_prof_df['studentId'] = neet_prof_df['studentId'].astype(str)
-    neet_prof_output = process_prof_data(neet_prof_df, exam_type='neet')
+# Get NEET Eng Data and Process it
+neet_eng_data = get_neet_eng_data()
+neet_eng_df = pd.DataFrame(neet_eng_data)
+neet_eng_dict = process_neet_eng_df(neet_eng_df)
 
+# Update Engagement Data in output_df
+eng_dict = jee_eng_dict | neet_eng_dict
+output_df['engagement'] = output_df['student_subject_id'].map(eng_dict)
+output_df['engagement'] = output_df['engagement'].fillna(0.0)
+output_df['engagement'] = output_df['engagement'].round(2)
+print('Engagement data fetched and processed')
 
-if __name__ == '__main__':
-    main()
+# Get JEE Prof Data and Process it
+jee_prof_data = get_jee_prof_data()
+jee_prof_df = pd.DataFrame(jee_prof_data)
+jee_prof_dict = process_jee_prof_df(jee_prof_df)
+
+# Get NEET Prof Data and Process it
+neet_prof_data = get_neet_prof_data()
+neet_prof_df = pd.DataFrame(neet_prof_data)
+neet_prof_dict = process_neet_prof_df(neet_prof_df)
+
+# Update Proficiency Data in output_df
+prof_dict = jee_prof_dict | neet_prof_dict
+output_df['proficiency'] = output_df['student_subject_id'].map(prof_dict)
+output_df['proficiency'] = output_df['proficiency'].fillna(0.0)
+output_df['proficiency'] = output_df['proficiency'].round(2)
+print('Proficiency data fetched and processed')
+
+# Export the data to google sheet
+output_df.set_index('student_subject_id', inplace=True)
+gs_obj = get_gs_obj()
+update_eng_data(output_df, gs_obj)
+update_prof_data(output_df, gs_obj)

@@ -10,7 +10,7 @@ from config.config import (
     INSTITUTE_ID,
     START_DATE,
     END_DATE,
-    CSV_FILE_PATH
+    SSS_CSV_PATH
 )
 import pandas as pd
 
@@ -135,5 +135,5 @@ class DatabaseClient:
 
         :return: List of student IDs
         """
-        df = pd.read_csv(CSV_FILE_PATH)
+        df = pd.read_csv(SSS_CSV_PATH)
         return df['studentId'].astype(str).tolist()
