@@ -1,7 +1,18 @@
+# Environment files
 .env
-input
-input/SSS_users.csv
-input/qandi_cred.json
-dataEnv
-input/SSS_users.csv
-config/config.py
+
+# Directories to ignore
+input/
+dataEnv/
+config/
+__pycache__/
+
+# Ignore all Jupyter Notebook files
+*.ipynb
+
+# Ignore log files
+*.log
+
+# Ignore Python bytecode
+*.pyc
+*.pyo
