@@ -1,6 +1,9 @@
 from config.config import SUBJECT_MAP
 
 def process_jee_eng_df(jee_eng_df):
+    if jee_eng_df.empty:
+        jee_eng_dict = {}
+        return jee_eng_dict
     jee_eng_df['subject'] = jee_eng_df['subjectId'].map(SUBJECT_MAP)
     jee_eng_df['student_subject_id'] = jee_eng_df['studentId'] + jee_eng_df['subject']
     jee_eng_df.drop(columns = ['_id', 'subjectId', 'studentId', 'subject'], inplace=True)
@@ -8,6 +11,9 @@ def process_jee_eng_df(jee_eng_df):
     return jee_eng_dict
 
 def process_neet_eng_df(neet_eng_df):
+    if neet_eng_df.empty:
+        neet_eng_dict = {}
+        return neet_eng_dict
     neet_eng_df.replace({'subjectId': {'4': '5', '146': '5'}}, inplace=True)
     neet_eng_df['subject'] = neet_eng_df['subjectId'].map(SUBJECT_MAP)
     neet_eng_df['student_subject_id'] = neet_eng_df['studentId'] + neet_eng_df['subject']
